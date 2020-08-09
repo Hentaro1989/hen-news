@@ -9,6 +9,7 @@ module.exports = {
   siteMetadata: {
     title: 'Hen News',
     description: 'Latest news in the us is here.',
+    bottomNavigationLabels: ['Timeline', 'Favorites', 'Settings'],
   },
   plugins: [
     'gatsby-plugin-react-helmet',

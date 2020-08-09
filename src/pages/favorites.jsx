@@ -1,5 +1,5 @@
 import React from 'react';
 
 export default () => {
-  return <div>SAVED</div>;
+  return <div>Favorites page is coming soon.</div>;
 };

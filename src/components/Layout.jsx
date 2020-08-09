@@ -30,11 +30,14 @@ export default ({ children }) => {
   const classes = useStyles();
   const [path, setPath] = useState('/');
 
-  const data = useStaticQuery(graphql`
+  const {
+    site: { siteMetadata },
+  } = useStaticQuery(graphql`
     query {
       site {
         siteMetadata {
           title
+          bottomNavigationLabels
         }
       }
     }
@@ -47,7 +50,7 @@ export default ({ children }) => {
       <AppBar position="fixed">
         <Toolbar variant="dense">
           <Typography variant="h6" color="inherit">
-            {data.site.siteMetadata.title}
+            {siteMetadata.title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -61,9 +64,9 @@ export default ({ children }) => {
         showLabels
         className={classes.bottom}
       >
-        <BottomNavigationAction label="Timeline" value="/" icon={<Timeline />} />
-        <BottomNavigationAction label="Favorite" value="/saved" icon={<Favorite />} />
-        <BottomNavigationAction label="Settings" value="/settings" icon={<Settings />} />
+        <BottomNavigationAction label={siteMetadata.bottomNavigationLabels[0]} value="/" icon={<Timeline />} />
+        <BottomNavigationAction label={siteMetadata.bottomNavigationLabels[1]} value="/favorites" icon={<Favorite />} />
+        <BottomNavigationAction label={siteMetadata.bottomNavigationLabels[2]} value="/settings" icon={<Settings />} />
       </BottomNavigation>
     </>
   );
