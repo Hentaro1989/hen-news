@@ -6,6 +6,10 @@
 
 module.exports = {
   /* Your site config here */
+  siteMetadata: {
+    title: 'Hen News',
+    description: 'Latest news in the us is here.',
+  },
   plugins: [
     'gatsby-plugin-react-helmet',
     {

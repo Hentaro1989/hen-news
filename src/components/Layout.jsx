@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { navigate } from 'gatsby';
+import { navigate, useStaticQuery, graphql } from 'gatsby';
 import Header from '../components/Header';
 import {
   CssBaseline,
@@ -30,6 +30,16 @@ export default ({ children }) => {
   const classes = useStyles();
   const [path, setPath] = useState('/');
 
+  const data = useStaticQuery(graphql`
+    query {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `);
+
   return (
     <>
       <Header />
@@ -37,7 +47,7 @@ export default ({ children }) => {
       <AppBar position="fixed">
         <Toolbar variant="dense">
           <Typography variant="h6" color="inherit">
-            News
+            {data.site.siteMetadata.title}
           </Typography>
         </Toolbar>
       </AppBar>
