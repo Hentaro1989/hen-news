@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { isBrowser } from './functions';
 
 export async function fetchLatestNews() {
-  if (typeof window === 'undefined') {
-    return { data: null };
+  if (!isBrowser) {
+    return null;
   }
 
   return await axios({
@@ -20,7 +21,7 @@ export async function fetchLatestNews() {
       safeSearch: 'Off',
       setLang: 'EN',
       textFormat: 'Raw',
-      category: JSON.parse(window.localStorage.getItem('settings'))?.category,
+      category: JSON.parse(localStorage.getItem('settings'))?.category,
     },
   }).catch((error) => {
     console.error(error);
