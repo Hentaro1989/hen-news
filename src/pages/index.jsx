@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Grid, Card, CardContent, CardActionArea, CardMedia, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchLatestNews } from '../api';
+import { useWindow } from '../customHooks';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -27,13 +28,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default () => {
-  // "gatsby build" can't understand global objects
-  if (typeof window === 'undefined' || typeof JSON === 'undefined') {
-    return <></>;
-  }
-
+  const { JSON, localStorage, open } = useWindow();
   const classes = useStyles();
-  const [articles, setArticles] = useState(JSON.parse(window.localStorage.getItem('news')) || []);
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    if (JSON && localStorage) {
+      setArticles(JSON.parse(localStorage.getItem('news')) || []);
+    }
+  }, [JSON, localStorage]);
 
   return (
     <>
@@ -57,7 +60,7 @@ export default () => {
         {articles.map((article, i) => (
           <Grid item xs={12} md={6} lg={4} key={i}>
             <Card className={classes.card}>
-              <CardActionArea className={classes.card} onClick={() => window.open(article.url, '_blank')}>
+              <CardActionArea className={classes.card} onClick={() => open(article.url, '_blank')}>
                 <CardContent>
                   <div className={classes.content}>
                     <CardMedia className={classes.media} image={article.image.thumbnail.contentUrl} />

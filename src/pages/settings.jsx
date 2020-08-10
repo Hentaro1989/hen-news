@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core';
 import { Category as CategoryIcon } from '@material-ui/icons';
 import { graphql } from 'gatsby';
 import FullscreenList from '../components/FullscreenList';
+import { useWindow } from '../customHooks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,15 +18,16 @@ export default ({
     site: { siteMetadata },
   },
 }) => {
-  if (typeof window === 'undefined' || typeof JSON === 'undefined') {
-    return <></>;
-  }
-
+  const { JSON, localStorage } = useWindow();
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(
-    JSON.parse(window.localStorage.getItem('settings'))?.category
-  );
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  useEffect(() => {
+    if (JSON && localStorage) {
+      setSelectedCategory(JSON.parse(localStorage.getItem('settings') || '{}')?.category);
+    }
+  }, [JSON, localStorage]);
 
   const saveCategory = (value) => {
     if (value === 'All') {
@@ -34,9 +36,9 @@ export default ({
 
     setSelectedCategory(value);
 
-    const settings = JSON.parse(window.localStorage.getItem('settings') || '{}');
+    const settings = JSON.parse(localStorage.getItem('settings') || '{}');
     settings.category = value;
-    window.localStorage.setItem('settings', JSON.stringify(settings));
+    localStorage.setItem('settings', JSON.stringify(settings));
   };
 
   return (

@@ -78,7 +78,7 @@ export default ({ path: previousPath, children }) => {
           value={currentPath}
           onChange={(event, path) => {
             setCurrentPath(path);
-            navigate(path);
+            navigate(path, { replace: true });
           }}
           showLabels
           className={classes.bottom}
