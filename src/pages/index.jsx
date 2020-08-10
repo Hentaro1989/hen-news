@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Card, CardContent, CardActionArea, CardMedia, Typography } from '@material-ui/core';
+import { Button, Grid, Card, CardContent, CardActionArea, CardMedia, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { fetchLatestNews } from '../api';
 
@@ -27,19 +27,20 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default () => {
-  const classes = useStyles();
-
   // "gatsby build" can't understand global objects
   if (typeof window === 'undefined' || typeof JSON === 'undefined') {
     return <></>;
   }
 
+  const classes = useStyles();
   const [articles, setArticles] = useState(JSON.parse(window.localStorage.getItem('news')) || []);
 
   return (
     <>
       <div style={{ textAlign: 'center', padding: '1em' }}>
-        <button
+        <Button
+          variant="contained"
+          color="primary"
           onClick={async () => {
             const { data } = await fetchLatestNews();
 
@@ -49,8 +50,8 @@ export default () => {
             }
           }}
         >
-          fire
-        </button>
+          fetch manually
+        </Button>
       </div>
       <Grid container spacing={2}>
         {articles.map((article, i) => (

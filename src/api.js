@@ -1,6 +1,10 @@
 import axios from 'axios';
 
 export async function fetchLatestNews() {
+  if (typeof window === 'undefined') {
+    return { data: null };
+  }
+
   return await axios({
     method: 'GET',
     url: 'https://bing-news-search1.p.rapidapi.com/news',
@@ -16,8 +20,9 @@ export async function fetchLatestNews() {
       safeSearch: 'Off',
       setLang: 'EN',
       textFormat: 'Raw',
+      category: JSON.parse(window.localStorage.getItem('settings'))?.category,
     },
   }).catch((error) => {
-    console.log(error);
+    console.error(error);
   });
 }
