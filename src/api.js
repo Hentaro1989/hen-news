@@ -6,6 +6,15 @@ export async function fetchLatestNews() {
     return null;
   }
 
+  // You can fetch news again after 1 hour.
+  const time = Number(localStorage.getItem('lastFetchedAt'));
+  const ONE_HOUR_IN_MILLIS = 1 * 60 * 60 * 1000;
+  if (time && new Date(time).getTime() + ONE_HOUR_IN_MILLIS > Date.now()) {
+    return Promise.resolve({ data: null });
+  }
+
+  localStorage.setItem('lastFetchedAt', Date.now());
+
   return await axios({
     method: 'GET',
     url: 'https://bing-news-search1.p.rapidapi.com/news',
