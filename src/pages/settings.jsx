@@ -4,7 +4,7 @@ import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@mate
 import { Category as CategoryIcon } from '@material-ui/icons';
 import { graphql } from 'gatsby';
 import FullscreenList from '../components/FullscreenList';
-import { isBrowser } from '../functions';
+import { isBrowser, useLocalStorage } from '../functions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,20 +24,19 @@ export default ({
 
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(
-    JSON.parse(localStorage.getItem('settings') || '{}')?.category
-  );
+  const [settings, setSettings] = useLocalStorage('settings', {});
+  const [, setLastFetchedAt] = useLocalStorage('lastFetchedAt');
 
   const saveCategory = (value) => {
+    const newSettings = { ...settings };
     if (value === 'All') {
       value = undefined;
     }
 
-    setSelectedCategory(value);
+    setLastFetchedAt(undefined);
 
-    const settings = JSON.parse(localStorage.getItem('settings') || '{}');
-    settings.category = value;
-    localStorage.setItem('settings', JSON.stringify(settings));
+    newSettings.category = value;
+    setSettings(newSettings);
   };
 
   return (
@@ -47,7 +46,7 @@ export default ({
           <ListItemIcon>
             <CategoryIcon />
           </ListItemIcon>
-          <ListItemText primary="Category" secondary={selectedCategory} />
+          <ListItemText primary="Category" secondary={settings.category} />
         </ListItem>
       </List>
       <FullscreenList

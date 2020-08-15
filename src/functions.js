@@ -17,6 +17,11 @@ export const useLocalStorage = (key, initialValue) => {
   const [state, setState] = useState(data === null ? initialValue : data);
 
   function setLocalStorage(data) {
+    if (data === null || data === undefined || Number.isNaN(data)) {
+      localStorage.removeItem(key);
+      return;
+    }
+
     setState(data);
     localStorage.setItem(key, typeof data === 'string' ? data : JSON.stringify(data));
   }

@@ -24,7 +24,9 @@ export default () => {
     if (articles.length === 0) {
       (async () => {
         const { data } = await fetchLatestNews();
-        setArticles(data.value);
+        if (data) {
+          setArticles(data.value);
+        }
       })();
     }
   }, [articles, setArticles]);
