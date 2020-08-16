@@ -1,18 +1,30 @@
 import React, { useEffect } from 'react';
+import { Button, useMediaQuery } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { fetchLatestNews } from '../api';
 import { isBrowser, useLocalStorage } from '../functions';
 import News from '../components/News';
 import PullToRefresh from '../components/PullToRefresh';
+
+const useStyles = makeStyles({
+  fetchButton: {
+    marginTop: '1em',
+    marginBottom: '1em',
+    display: ({ isPC }) => (isPC ? 'none' : 'inline'),
+  },
+});
 
 export default () => {
   if (!isBrowser) {
     return null;
   }
 
+  const isPC = useMediaQuery('(max-width: 1280px)');
+  const classes = useStyles({ isPC: isPC });
   const [articles, setArticles] = useLocalStorage('news', []);
   const [favorites, setFavorites] = useLocalStorage('favorites', []);
 
-  async function onPull() {
+  async function fetchNews() {
     const { data } = await fetchLatestNews();
 
     if (data) {
@@ -32,7 +44,10 @@ export default () => {
   }, [articles, setArticles]);
 
   return (
-    <PullToRefresh onPull={onPull}>
+    <PullToRefresh onPull={fetchNews}>
+      <Button className={classes.fetchButton} variant="contained" onClick={fetchNews} color="primary">
+        Fetch News
+      </Button>
       <News articles={articles} favorites={favorites} setFavorites={setFavorites} />
     </PullToRefresh>
   );

@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
   container: {
     marginTop: '64px',
     marginBottom: '56px',
+    textAlign: 'center',
   },
   bottom: {
     position: 'fixed',
