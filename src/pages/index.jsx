@@ -19,7 +19,7 @@ export default () => {
     return null;
   }
 
-  const isMobile = useMediaQuery('(max-width: 1280px)');
+  const isMobile = useMediaQuery('(max-width: 1280px)', { noSsr: true });
   const classes = useStyles({ isMobile: isMobile });
   const [articles, setArticles] = useLocalStorage('news', []);
   const [favorites, setFavorites] = useLocalStorage('favorites', []);
